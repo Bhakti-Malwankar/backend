@@ -1,20 +1,25 @@
 {
-  "name": "chaibackend",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "a pratice app to deploy",
+  "description": "a backend project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bhakti-Malwankar/backend.git"
   },
   "keywords": [
-    "node",
-    "chai"
+    "javascript",
+    "backend",
+    "data",
+    "module"
   ],
-  "author": "bhakti",
+  "author": "Bhakti Malwankar",
   "license": "ISC",
-  "dependencies": {
-    "dotenv": "^17.2.4",
-    "express": "^5.2.1"
-  }
+  "bugs": {
+    "url": "https://github.com/Bhakti-Malwankar/backend/issues"
+  },
+  "homepage": "https://github.com/Bhakti-Malwankar/backend#readme"
 }
