@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "a backend project",
-  "type":"module",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js"
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Bhakti-Malwankar/backend/issues"
   },
-  "homepage": "https://github.com/Bhakti-Malwankar/backend#readme"
+  "homepage": "https://github.com/Bhakti-Malwankar/backend#readme",
+  "devDependencies": {
+    "prettier": "^3.8.3"
+  }
 }
