@@ -18,8 +18,14 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
+    const [baseUri, queryString] = process.env.MONGODB_URI.split("?");
+    const normalizedBaseUri = baseUri.endsWith("/") ? baseUri.slice(0, -1) : baseUri;
+    const mongoUri = queryString
+      ? `${normalizedBaseUri}/${process.env.DB_NAME}?${queryString}`
+      : `${normalizedBaseUri}/${process.env.DB_NAME}`;
+
     const connectInstance = await mongoose.connect(
-      `${process.env.MONGODB_URI}/${process.env.DB_NAME}`
+      mongoUri
     );
     console.log(`Connected to MongoDB successfully ${connectInstance.connection.host}`);
   } catch (err) {
