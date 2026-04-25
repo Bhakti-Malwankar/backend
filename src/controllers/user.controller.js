@@ -1,7 +1,7 @@
 import {asyncHandler} from '../utils/asyncHandlers.js';
 import {ApiError} from '../utils/ApiError.js';
 import {User} from '../models/user.models.js';
-import {uploadToCloudinary} from '../utils/cloudinary.js';
+import {deleteFromCloudinary, uploadToCloudinary} from '../utils/cloudinary.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
 
@@ -75,6 +75,7 @@ if(!avatar){
 const user=await User.create({
     fullname,
     avatar:avatar.url,
+    avatarPublicId:avatar.public_id,
     coverImage:coverPhoto?.url || "",
     email,
     username:username.toLowerCase(),
@@ -242,22 +243,26 @@ const updateUserAvatar=asyncHandler(async(req,res)=>{
     if(!avatarLocalPath){
         throw new ApiError(400,"Avatar image is required");
     }
+    const currentUser=await User.findById(req.user?._id);
+    if(!currentUser){
+        throw new ApiError(404,"User not found");
+    }
+
+    const oldAvatarPublicId=currentUser.avatarPublicId;
     const avatar=await uploadToCloudinary(avatarLocalPath);
-    if(!avatar.url){
+    if(!avatar?.url){
         throw new ApiError(400,"Failed to upload avatar image");
     }
-    const user=await User.findByIdAndUpdate(req.user?._id,
 
-        {
-            $set:{
-                avatar:avatar.url
-            }
+    currentUser.avatar=avatar.url;
+    currentUser.avatarPublicId=avatar.public_id;
+    await currentUser.save({validateBeforeSave:false});
 
-        },
-        {
-            new:true
-        }
-    ).select("-password");
+    if(oldAvatarPublicId){
+        await deleteFromCloudinary(oldAvatarPublicId);
+    }
+
+    const user=await User.findById(currentUser._id).select("-password");
 
         return res.status(200).json(new ApiResponse(200,user,"Avatar updated successfully"))
 })
